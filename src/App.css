@@ -1,0 +1,531 @@
+/* Global Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  line-height: 1.6;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.app-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.app-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.app-header p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* Main Content */
+.app-content {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Controls Panel */
+.controls-panel {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+
+.equation-input-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.equation-input-section label {
+  font-weight: 600;
+  color: #555;
+  min-width: 120px;
+}
+
+.equation-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.equation-input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.load-button {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.load-button:hover {
+  background: #5a6fd8;
+}
+
+.view-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.view-toggle {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.view-toggle:hover {
+  background: #0da271;
+}
+
+.undo-redo {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.undo-button,
+.redo-button {
+  padding: 0.75rem 1.5rem;
+  border: 2px solid #e1e5e9;
+  background: white;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.undo-button:hover:not(:disabled),
+.redo-button:hover:not(:disabled) {
+  border-color: #667eea;
+  background: #f8f9fa;
+}
+
+.undo-button:disabled,
+.redo-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Equation Display */
+.equation-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+
+.equation-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  min-height: 200px;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 2px dashed #e1e5e9;
+}
+
+.equation-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-radius: 8px;
+  min-height: 150px;
+  transition: all 0.3s;
+}
+
+.equation-side.drag-over {
+  background: rgba(102, 126, 234, 0.1);
+  border: 2px dashed #667eea;
+}
+
+.terms-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.operator {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #666;
+  margin: 0 0.25rem;
+}
+
+.term-wrapper {
+  cursor: grab;
+  transition: transform 0.2s;
+}
+
+.term-wrapper:hover {
+  transform: scale(1.05);
+}
+
+.term-wrapper:active {
+  cursor: grabbing;
+}
+
+/* Term Components */
+.term-box {
+  padding: 0.75rem 1rem;
+  border: 2px solid;
+  border-radius: 8px;
+  background: white;
+  font-weight: 600;
+  font-size: 1.1rem;
+  min-width: 60px;
+  text-align: center;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.term-box.selected {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+.term-box.dragging {
+  opacity: 0.5;
+}
+
+.negative-sign {
+  color: #ef4444;
+  font-weight: bold;
+  margin-right: 0.25rem;
+}
+
+/* Cloud View */
+.term-cloud {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 12px;
+  background: white;
+  transition: all 0.2s;
+}
+
+.term-cloud.selected {
+  background: #f8f9fa;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.cloud-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.cloud-item {
+  padding: 0.5rem 0.75rem;
+  border: 2px solid;
+  border-radius: 6px;
+  background: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  min-width: 40px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.equals-sign {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #666;
+  padding: 0 1rem;
+}
+
+.empty-side {
+  color: #999;
+  font-style: italic;
+  padding: 1rem;
+}
+
+.operation-feedback {
+  background: #10b981;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+/* Operations Section */
+.operations-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+
+.operation-input h3 {
+  margin-bottom: 1rem;
+  color: #333;
+  font-size: 1.3rem;
+}
+
+.operation-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.operation-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.operation-select,
+.operation-value,
+.operation-side {
+  padding: 0.75rem;
+  border: 2px solid #e1e5e9;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.operation-select:focus,
+.operation-value:focus,
+.operation-side:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.operation-value {
+  flex: 1;
+  min-width: 120px;
+}
+
+.apply-button {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.apply-button:hover {
+  background: #5a6fd8;
+}
+
+.operation-examples {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* History Panel */
+.history-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.history-panel h3 {
+  margin-bottom: 1rem;
+  color: #333;
+  font-size: 1.3rem;
+}
+
+.empty-history {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  padding: 2rem;
+}
+
+.history-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.history-step {
+  padding: 1rem;
+  border-radius: 8px;
+  border: 2px solid #e1e5e9;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.history-step:hover {
+  border-color: #667eea;
+  background: #f8f9fa;
+}
+
+.history-step.current {
+  border-color: #667eea;
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.history-step.past {
+  opacity: 0.7;
+}
+
+.history-step.future {
+  opacity: 0.4;
+}
+
+.step-number {
+  font-weight: 600;
+  color: #667eea;
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+}
+
+.step-description {
+  margin-bottom: 0.5rem;
+}
+
+.operation {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.initial {
+  color: #666;
+  font-style: italic;
+}
+
+.step-equation {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .app-content {
+    padding: 1rem;
+  }
+  
+  .equation-display {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .equation-side {
+    min-height: 120px;
+  }
+  
+  .operation-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .operation-select,
+  .operation-value,
+  .operation-side {
+    width: 100%;
+  }
+  
+  .view-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .equation-input-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .equation-input-section label {
+    min-width: auto;
+  }
+}
+
+/* Term Groups and Parentheses */
+.term-group-wrapper {
+  display: inline-block;
+  margin: 0 2px;
+}
+
+.term-group {
+  display: flex;
+  align-items: center;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 4px 8px;
+}
+
+.parentheses {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #6c757d;
+  margin: 0 2px;
+}
+
+.grouped-terms {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Educational Explanations */
+.educational-explanation {
+  color: #6b7280;
+  font-size: 0.85rem;
+  font-style: italic;
+  margin: 0.25rem 0;
+  line-height: 1.3;
+}
